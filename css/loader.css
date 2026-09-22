@@ -1,0 +1,139 @@
+/* ------------------------------------------------
+ * loader.css — standalone preloader
+ * No :root variable dump (style.css already defines them).
+ * Every var has a hard fallback, so this file works alone.
+ * ------------------------------------------------ */
+
+/* 01. Loader shell
+ * ------------------------------------------------ */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.loader.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader__wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--base, #161616);
+  color: var(--t-bright, #ffffff);
+  transform: translateY(0);
+  transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+
+.loader.is-hiding .loader__wrapper {
+  transform: translateY(-100%);
+}
+
+/* 02. Counter
+ * ------------------------------------------------ */
+.loader__content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  z-index: 2;
+  overflow: hidden;
+  color: var(--t-bright, #ffffff);
+}
+
+.loader__count {
+  display: flex;
+  justify-content: flex-end;
+  overflow: hidden;
+  line-height: 1;
+  transform: translateY(0);
+  transition: transform 0.7s cubic-bezier(0.55, 0, 1, 0.45);
+  will-change: transform;
+}
+
+.loader.is-hiding .loader__count {
+  transform: translateY(110%);
+}
+
+.loader__count span {
+  display: inline-flex;
+  font-family: var(--_font-accent, "Funnel Display", sans-serif);
+  font-weight: var(--fw-medium, 500);
+  font-size: 6rem;
+  line-height: 0.9;
+  letter-spacing: -0.06rem;
+  color: var(--t-bright, #ffffff);
+  font-variant-numeric: tabular-nums;
+}
+
+@media only screen and (min-width: 768px) {
+  .loader__count span { font-size: 8rem; }
+}
+
+@media only screen and (min-width: 1200px) {
+  .loader__count span { font-size: 10rem; }
+}
+
+@media only screen and (min-width: 1600px) {
+  .loader__count span { font-size: 12rem; }
+}
+
+/* 03. Page reveal (CSS fallback — used only if GSAP is absent)
+ * ------------------------------------------------ */
+html.is-loading,
+html.is-loading body {
+  overflow: hidden;
+  height: 100%;
+}
+
+.no-gsap .loading__item,
+.no-gsap .loading__fade {
+  opacity: 0;
+}
+
+.no-gsap.is-revealed .loading__item {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.no-gsap .loading__item {
+  transform: translateY(80px);
+}
+
+.no-gsap.is-revealed .loading__fade {
+  opacity: 1;
+  transition: opacity 0.8s ease 0.4s;
+}
+
+/* Stagger for the first items in a loading-wrap */
+.no-gsap.is-revealed .loading__item:nth-child(1) { transition-delay: 0.05s; }
+.no-gsap.is-revealed .loading__item:nth-child(2) { transition-delay: 0.13s; }
+.no-gsap.is-revealed .loading__item:nth-child(3) { transition-delay: 0.21s; }
+.no-gsap.is-revealed .loading__item:nth-child(4) { transition-delay: 0.29s; }
+.no-gsap.is-revealed .loading__item:nth-child(5) { transition-delay: 0.37s; }
+
+/* 04. Accessibility
+ * ------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .loader,
+  .loader__wrapper,
+  .loader__count,
+  .no-gsap.is-revealed .loading__item,
+  .no-gsap.is-revealed .loading__fade {
+    transition-duration: 0.01ms !important;
+  }
+}

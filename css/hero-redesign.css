@@ -1,0 +1,47 @@
+/* ==================================================================
+ * hero-redesign.css — styling for the js/cinematic.js film layer
+ * ------------------------------------------------------------------
+ * This file only styles the elements cinematic.js creates at runtime
+ * (.cine-stage, .cine-scrim, and the <html> ready/static classes).
+ * It does not touch any existing template rule, section, color, or
+ * spacing — nothing here can change how the rest of the page looks.
+ * ================================================================== */
+
+.cine-stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.cine-stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cine-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: rgba(0, 0, 0, var(--cine-scrim, 0.55));
+}
+
+/* The template's own header/main/footer are inserted after the film
+   and scrim in the DOM, so they already paint on top with no z-index
+   changes needed anywhere else in the site. */
+
+/* Reduced-motion / low-power fallback: cinematic.js swaps in a still
+   poster image and adds this class instead of running the sequence. */
+html.cine-static .cine-stage {
+  background-attachment: fixed;
+}
